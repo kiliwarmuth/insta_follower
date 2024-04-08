@@ -30,6 +30,10 @@ This script analyzes your Instagram follow and follower lists to provide insight
 - `followers.txt`: File containing the usernames of people who follow you.
 - `-v` or `--verbose`: Optional flag to print the full follow and followers lists.
 
+```bash
+python3 analyze_insta.py follow.txt followers.txt
+```
+
 ## Output
 
 The script provides the following output:
