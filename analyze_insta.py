@@ -60,22 +60,15 @@ def get_username_list(lines):
     for i, line in enumerate(lines):
         line = line.strip()
 
-        # Skip the line if it contains "Suchen" and it's the first line
-        if i == 0 and "Suchen" in line:
-            continue
-
-        if "Profilbild" in line:
+        if "Profilbild" in line or "profile picture" in line:
             profilbild_flag = True
         elif profilbild_flag:
             username_list.append(line)
             profilbild_flag = False
-
-        # Check if the first line doesn't contain "Profilbild" and add the next line to username_list
-        if i == 0 and "Profilbild" not in line:
+        elif i == 0 and ("Suchen" not in line and "Search" not in line):
             username_list.append(line)
-
+            
     return username_list
-
 
 def find_non_followers(follow_list, followers_list):
     """
@@ -128,8 +121,8 @@ def parse_arguments():
         argparse.Namespace: Parsed arguments.
     """
     parser = argparse.ArgumentParser(description="Instagram Follow Analytics Script")
-    parser.add_argument("follow_file", help="File containing people you follow -> follow.txt")
-    parser.add_argument("followers_file", help="File containing people who follow you -> follower.txt")
+    parser.add_argument("--following_file", default="following.txt", help="File containing people you follow -> following.txt")
+    parser.add_argument("--followers_file", default="followers.txt", help="File containing people who follow you -> followers.txt")
     parser.add_argument("-v", "--verbose", action="store_true", help="Print followers and follow lists")
     return parser.parse_args()
 
@@ -143,7 +136,7 @@ def main():
 
     args = parse_arguments()
     
-    follow_list = get_username_list(read_file(args.follow_file))
+    follow_list = get_username_list(read_file(args.following_file))
     followers_list = get_username_list(read_file(args.followers_file))
 
     if follow_list is None or followers_list is None:
