@@ -123,7 +123,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Instagram Follow Analytics Script")
     parser.add_argument("--following_file", default="following.txt", help="File containing people you follow -> following.txt")
     parser.add_argument("--followers_file", default="followers.txt", help="File containing people who follow you -> followers.txt")
-    parser.add_argument("-v", "--verbose", action="store_true", help="Print followers and follow lists")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Print followers and following lists")
     return parser.parse_args()
 
 def main():
