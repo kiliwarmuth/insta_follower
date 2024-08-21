@@ -5,7 +5,6 @@ This script analyzes your Instagram follow and follower lists to provide insight
 ## Prerequisites
 
 - Python 3.x
-- `termcolor` module (install it using `pip install termcolor`)
 - Language on Instagram set to either `Deutsch` or `English`
 
 ## Usage
@@ -26,7 +25,6 @@ This script analyzes your Instagram follow and follower lists to provide insight
 
 8. Run the script from the command line using the following optional parameters:
 
-
 - `--following.txt`: File containing the usernames of people you follow.
 - `--followers.txt`: File containing the usernames of people who follow you.
 - `-v` or `--verbose`: Optional flag to print the full follow and followers lists.
@@ -44,8 +42,6 @@ The script provides the following output:
 - The total number of people you follow and the total number of followers you have.
 - Lists of people you are not following back and people not following you back, each with colored highlighting for easy identification.
 
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
