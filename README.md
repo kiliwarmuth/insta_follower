@@ -19,7 +19,7 @@ This script analyzes your Instagram follow and follower lists to provide insight
 
 5. Once all accounts are selected, right-click and choose "Copy" or use the keyboard shortcut (Ctrl+C on Windows or Command+C on macOS).
 
-6. Paste the copied list into a text file named `followers.txt` for your followers and `ing.txt` for the people you follow.
+6. Paste the copied list into a text file named `followers.txt` for your followers and `following.txt` for the people you follow.
 
 7. Save the text file in the same directory as this script.
 

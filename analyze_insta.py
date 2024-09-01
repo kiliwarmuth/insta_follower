@@ -1,10 +1,9 @@
 import sys
 import argparse
 import logging
-import time
 
 # Configure logging at the top with the desired format
-LOG_FORMAT = "[%(levelname)s] - %(asctime)s - %(message)s"
+LOG_FORMAT = "\n[%(levelname)s] - %(asctime)s - %(message)s"
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, datefmt='%H:%M')
 
 
@@ -27,8 +26,8 @@ def read_file(file_name):
                       " folder as this script.")
         logging.error("Copy the Follow/Followers lists from the Instagram"
                       " Website.")
-        logging.error("follow.txt -> people you follow")
-        logging.error("followers.txt -> people following you")
+        logging.error("follow.txt -> accounts you follow")
+        logging.error("followers.txt -> accounts following you")
         sys.exit(1)
     except Exception as e:
         logging.error("An error occurred while reading the file: %s", e)
@@ -45,23 +44,32 @@ def get_username_list(lines):
     Returns:
         list: List of usernames.
     """
+    skip_words = {"Entfernen", "Remove", "Suchen", "Search"}
     username_list = []
-    profilbild_flag = False
+    next_is_username = False
 
     for i, line in enumerate(lines):
         line = line.strip()
 
-        # Skip "Entfernen", "Remove", and any empty lines
-        if line in ["Entfernen", "Remove"] or not line:
+        # Skip empty lines and irrelevant lines
+        if line in skip_words:
             continue
 
+        # Process possible empty first line
+        if i == 0 and not line:
+            next_is_username = True
+            continue
+
+        # Add username
+        if next_is_username:
+            next_is_username = False
+            username_list.append(line)
+            continue
+
+        # If the line contains "Profilbild" or "profile picture",
+        # the next line is a username
         if "Profilbild" in line or "profile picture" in line:
-            profilbild_flag = True
-        elif profilbild_flag:
-            username_list.append(line)
-            profilbild_flag = False
-        elif i == 0 and ("Suchen" not in line and "Search" not in line):
-            username_list.append(line)
+            next_is_username = True
 
     return username_list
 
@@ -147,10 +155,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Instagram Follow Analytics"
                                      " Script")
     parser.add_argument("--following_file", default="following.txt",
-                        help="File containing people you follow ->"
+                        help="File containing accounts you follow ->"
                         " following.txt")
     parser.add_argument("--followers_file", default="followers.txt",
-                        help="File containing people who follow you ->"
+                        help="File containing accounts who follow you ->"
                         " followers.txt")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print followers and following lists")
@@ -184,21 +192,27 @@ def main():
     non_followers = find_non_followers(follow_list, followers_list)
 
     logging.info("Printing Summary Info...")
-    logging.info("You follow %s people, and you have %s followers.",
+    logging.info("You follow %s accounts, and you have %s followers.",
                  color_text(len(follow_list), 'cyan'),
                  color_text(len(followers_list), 'cyan'))
-    logging.info("%s people are not following you back.",
-                 color_text(len(non_followers), 'yellow'))
-    logging.info("You are not following back %s people.",
+    count_non_followers = len(non_followers)
+    logging.info("%s account %s not following you back.",
+                 color_text(count_non_followers, 'yellow'),
+                 "is" if count_non_followers == 1 else "are")
+    logging.info("You are not following back %s account(s).",
                  color_text(len(non_follows), 'red'))
 
     if args.verbose:
-        print_colored_list("People you follow:", follow_list, 'blue')
-        print_colored_list("People following you:", followers_list, 'magenta')
+        print_colored_list("Accounts you follow:",
+                           follow_list, 'blue')
+        print_colored_list("Accounts following you:",
+                           followers_list, 'magenta')
 
     # Print the results
-    print_colored_list("People you are not following back:", non_follows, 'yellow')
-    print_colored_list("People not following you back:", non_followers, 'red')
+    print_colored_list("\nAccounts you are not following back:",
+                       non_follows, 'yellow')
+    print_colored_list("Accounts not following you back:",
+                       non_followers, 'red')
 
 
 if __name__ == "__main__":
