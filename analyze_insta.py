@@ -1,3 +1,5 @@
+"""Instagram follower analysis script"""
+
 import sys
 import argparse
 import logging
@@ -29,8 +31,13 @@ def read_file(file_name):
         logging.error("follow.txt -> accounts you follow")
         logging.error("followers.txt -> accounts following you")
         sys.exit(1)
-    except Exception as e:
-        logging.error("An error occurred while reading the file: %s", e)
+    except IOError as err:
+        logging.error("An I/O error occurred while reading the file: %s",
+                      err)
+        sys.exit(1)
+    except UnicodeDecodeError as err:
+        logging.error("A decoding error occurred while reading the file: %s",
+                      err)
         sys.exit(1)
 
 
