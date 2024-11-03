@@ -145,8 +145,8 @@ def print_colored_list(title, user_list, color='white'):
     Returns:
         None
     """
-    print(f"{color_text(title, 'green')} ({color_text(len(user_list),
-          'cyan')}):")
+    print(f"{color_text(title, 'green')} "
+          f"({color_text(len(user_list), 'cyan')}):")
     for user in user_list:
         print(f"  - {color_text(user, color)}")
     print("")
